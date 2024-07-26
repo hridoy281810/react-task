@@ -669,7 +669,13 @@ const MkdListTableV2 = ({
         <button
           type="button"
           ref={refreshRef}
-          onClick={() => getData(1, pageSize)}
+          onClick={() => {
+            if (useExternalData) {
+              setCurrentTableData(() => externalData);
+            } else {
+              getData(1, pageSize);
+            }
+          }}
           className="hidden"
         ></button>
       )}

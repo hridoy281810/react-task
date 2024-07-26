@@ -389,7 +389,7 @@ const AdminListReceipts = () => {
               column: "receipt_status",
               action: "hide",
               operator: operations.EQUAL,
-              ifValue: 0,
+              ifValue: 1,
             },
           },
           open: {
@@ -408,7 +408,7 @@ const AdminListReceipts = () => {
               column: "receipt_status",
               action: "hide",
               operator: operations.EQUAL,
-              ifValue: 1,
+              ifValue: 0,
             },
           },
           add: {
@@ -470,6 +470,10 @@ const AdminListReceipts = () => {
         table="receipts"
         inputConfirmation={false}
       />
+      {/* 
+      <div className="w-full h-[31.25rem] border-2 border-red-600">
+        <canvas className="border border-blue-600 h-full w-full" />
+      </div> */}
     </div>
   );
 };
