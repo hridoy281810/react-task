@@ -1,5 +1,7 @@
 # This project is a toy project for training and quality assurance purposes
 
+## Do not modify, change or delete any component or configurations made in this project by default.
+
 # Task
 
 All this task must be done in 1 day
