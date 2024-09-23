@@ -14,7 +14,28 @@ export default function MkdSDK() {
   };
   
   this.login = async function (email, password, role) {
-    //TODO
+    const response = await fetch(this._baseurl + '/v1/api/rest/user/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-project': base64Encode,
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        role: role,
+      }),
+    });
+  
+    const jsonResponse = await response.json();
+  
+    if (response.status === 401 || response.status === 403) {
+      throw new Error(jsonResponse.message);
+    }
+  
+    localStorage.setItem('token', jsonResponse.token);
+  
+    return jsonResponse;
   };
 
   this.getHeader = function () {
@@ -86,9 +107,28 @@ export default function MkdSDK() {
     }
   };  
 
-  this.check = async function (role) {
-    //TODO
-  };
+    this.check = async function (role) {
+      const response = await fetch(this._baseurl + '/v1/api/rest/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-project': base64Encode,
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          role: role,
+        }),
+      });
+    
+      const jsonResponse = await response.json();
+    
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(jsonResponse.message);
+      }
+    
+      return jsonResponse;
+    };
+    
 
   return this;
 }
