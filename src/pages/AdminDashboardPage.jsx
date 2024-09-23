@@ -33,7 +33,6 @@ const DraggableItem = ({ item, index, moveItem }) => {
 
 const AdminDashboardPage = () => {
     const leaderBoardData = [
-        // Your leaderboard data...
         { id: 1, title: "Rune raises $100,000 for marketing through NFT butterflies sale", author: "nftninja", authorImage: "https://i.ibb.co.com/KD2JzfM/person2.png", likes: 254, imageUrl: "https://i.ibb.co.com/PQxb8v9/Rectangle-1534.png", sn: '01' },
         { id: 2, title: "The Cryptocurrency Trading Bible", author: "deniscrypto", authorImage: "https://i.ibb.co.com/KD2JzfM/person2.png", likes: 203, imageUrl: "https://i.ibb.co.com/PQxb8v9/Rectangle-1534.png", sn: "02" },
         { id: 3, title: "Designing our new company brand: Meta", author: "meta_world98", authorImage: "https://i.ibb.co.com/KD2JzfM/person2.png", likes: 134, imageUrl: "https://i.ibb.co.com/PQxb8v9/Rectangle-1534.png", sn: "03" },
@@ -51,7 +50,7 @@ const AdminDashboardPage = () => {
         { id: 15, title: "Investing in virtual real estate", author: "virtual_investor", authorImage: "https://i.ibb.co.com/KD2JzfM/person2.png", likes: 130, imageUrl: "https://i.ibb.co.com/PQxb8v9/Rectangle-1534.png", sn: "15" },
     ];
 
-    const itemsPerPage = 10; // Set to 10
+    const itemsPerPage = 10;
     const { dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
     
@@ -94,7 +93,6 @@ const AdminDashboardPage = () => {
         <DndProvider backend={HTML5Backend}>
             <div className="w-full bg-black">
                 <div className="w-[1216px] mx-auto">
-                    {/* Header */}
                     <header className="h-[96px] flex justify-between items-center mb-[72px]">
                         <h1 className="text-white text-5xl font-extrabold">App</h1>
                         <div className="bg-[#9bff00] px-6 py-3 rounded-[40px] flex items-center gap-2 text-[#050505]">
@@ -131,7 +129,7 @@ const AdminDashboardPage = () => {
                         ))}
                     </div>
 
-                    {/* Pagination Controls */}
+
                     <div className="flex justify-between items-center mt-5">
                         <button onClick={handlePrevPage} disabled={currentPage === 1} className="text-white bg-[#9bff00] px-4 py-2 rounded">
                             Prev
