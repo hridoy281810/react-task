@@ -16,8 +16,9 @@ import {
 } from "Assets/svgs";
 import { AiFillEye } from "react-icons/ai";
 import { operations } from "Components/MkdListTable/MkdListTableBindOperations";
-import { receiptData } from "Utils/data";
+
 import { ActionConfirmationModal } from "Components/ActionConfirmationModal";
+import { receiptData } from "Utils/data";
 
 let sdk = new MkdSDK();
 
@@ -316,7 +317,7 @@ const AdminListReceipts = () => {
     state: { confirmRequest },
   } = React.useContext(GlobalContext);
   const [selectedItems, setSelectedItems] = React.useState([]);
-  const [localReceiptData, setLocalReceiptData] = React.useState([]);
+  const [localReceiptData, setLocalReceiptData] = React.useState(receiptData);
   const [showOpenModal, setShowOpenModal] = React.useState(false);
   const [showCloseModal, setShowCloseModal] = React.useState(false);
 

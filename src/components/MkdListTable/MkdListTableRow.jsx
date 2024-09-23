@@ -41,74 +41,94 @@ const MkdListTableRow = ({
 
   const showWithLimit = (column) => {
     if (expandRow) {
-      if (["string", "number"].includes(typeof listResult)) {
-        return (
-          <span
-            className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200  p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
-          >
-            {listResult}
-          </span>
-        );
-      }
-
-      if (typeof listResult === "object" && Array.isArray(listResult)) {
-        return (
-          <>
-            {listResult.map((item, itemKey) => {
-              return (
+        if (["string", "number"].includes(typeof listResult)) {
+            return (
                 <span
-                  className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200  p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
-                  key={itemKey}
+                    className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200 p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
                 >
-                  {item}
+                    {listResult}
                 </span>
-              );
-            })}
-          </>
-        );
-      }
+            );
+        }
+
+        if (Array.isArray(listResult)) {
+            return (
+                <>
+                    {listResult.map((item, itemKey) => {
+                        if (column.accessor === "line_items" || column.accessor === "receipt_charges") {
+                            return (
+                                <div key={itemKey} className="flex flex-col">
+                                    {Object.entries(item).map(([key, value], index) => (
+                                        <span key={index} className="flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200 p-[.25rem_.5rem_.25rem_.25rem] capitalize">
+                                            <strong>{key}: </strong>{JSON.stringify(value)} {/* Display as needed */}
+                                        </span>
+                                    ))}
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <span
+                                className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200 p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
+                                key={itemKey}
+                            >
+                                {item}
+                            </span>
+                        );
+                    })}
+                </>
+            );
+        }
     } else {
-      if (["string", "number"].includes(typeof listResult)) {
-        return (
-          <span
-            className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200  p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
-          >
-            {listResult}
-          </span>
-        );
-      }
-      if (typeof listResult === "object" && Array.isArray(listResult)) {
-        const lengthToHide =
-          listResult.length > column.limit
-            ? `+${listResult.length - column?.limit}`
-            : null;
-        const itemsToShow = listResult
-          .map((item, index) => {
-            if (index + 1 <= column.limit) {
-              return item;
-            }
-          })
-          .filter(Boolean);
-
-        if (lengthToHide) itemsToShow.push(lengthToHide);
-
-        return (
-          <>
-            {itemsToShow.map((item, itemKey) => {
-              return (
+        if (["string", "number"].includes(typeof listResult)) {
+            return (
                 <span
-                  className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200  p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
-                  key={itemKey}
+                    className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200 p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
                 >
-                  {item}
+                    {listResult}
                 </span>
-              );
-            })}
-          </>
-        );
-      }
+            );
+        }
+        if (Array.isArray(listResult)) {
+            const lengthToHide =
+                listResult.length > column.limit
+                    ? `+${listResult.length - column?.limit}`
+                    : null;
+            const itemsToShow = listResult.slice(0, column.limit).map((item, index) => {
+                   if (column.accessor === "line_items" || column.accessor === "receipt_charges") {
+                        return (
+                            <div key={index} className="flex flex-col">
+                                {Object.entries(item).map(([key, value], index) => (
+                                    <span key={index} className="flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200 p-[.25rem_.5rem_.25rem_.25rem] capitalize">
+                                        <strong>{key}: </strong>{JSON.stringify(value)} {/* Display as needed */}
+                                    </span>
+                                ))}
+                            </div>
+                        );
+                    }
+                    return item;
+                });
+
+            if (lengthToHide) itemsToShow.push(lengthToHide);
+
+            return (
+                <>
+                    {itemsToShow.map((item, itemKey) => {
+                        return (
+                            <span
+                                className={`flex w-fit items-center justify-normal gap-[.25rem] rounded-[.375rem] border border-soft-200 p-[.25rem_.5rem_.25rem_.25rem] capitalize`}
+                                key={itemKey}
+                            >
+                                {item}
+                            </span>
+                        );
+                    })}
+                </>
+            );
+        }
     }
-  };
+};
+
 
   const getColumnListData = async (value, column) => {
     // TO DO the processList function

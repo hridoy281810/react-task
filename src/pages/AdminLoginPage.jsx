@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,12 +7,10 @@ import MkdSDK from "Utils/MkdSDK";
 import { AuthContext } from "Context/Auth";
 
 const AdminLoginPage = () => {
-  const schema = yup
-    .object({
-      email: yup.string().email().required(),
-      password: yup.string().required(),
-    })
-    .required();
+  const schema = yup.object({
+    email: yup.string().email("Invalid email format").required("Email is required"),
+    password: yup.string().required("Password is required"),
+  }).required();
 
   const { dispatch } = React.useContext(AuthContext);
   const navigate = useNavigate();
@@ -24,10 +22,44 @@ const AdminLoginPage = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const onSubmit = async (data) => {
     let sdk = new MkdSDK();
-    //TODO
+    try {
+      // Call login method from SDK
+      const result = await sdk.login(data.email, data.password, "admin");
+      console.log(result);
+
+      // Dispatch user data and token
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          token: result.token,
+          user: result.user,
+        },
+      });
+
+      // Show snackbar on successful login
+      setSnackbarMessage("Logged in successfully!");
+      setShowSnackbar(true);
+
+      // Hide snackbar and redirect to dashboard
+      setTimeout(() => {
+        setShowSnackbar(false);
+        navigate("/admin/dashboard");
+      }, 3000);
+      
+    } catch (error) {
+      // Error handling for login failure
+      setSnackbarMessage("Login failed. Please check your credentials and try again.");
+      setShowSnackbar(true);
+      setTimeout(() => {
+        setShowSnackbar(false);
+      }, 3000);
+    }
   };
 
   return (
@@ -81,6 +113,12 @@ const AdminLoginPage = () => {
           />
         </div>
       </form>
+    
+      {showSnackbar && (
+        <div className="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-md">
+          {snackbarMessage}
+        </div>
+      )}
     </div>
   );
 };

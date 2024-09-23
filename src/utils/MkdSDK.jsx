@@ -30,13 +30,18 @@ export default function MkdSDK() {
     const jsonResponse = await response.json();
   
     if (response.status === 401 || response.status === 403) {
-      throw new Error(jsonResponse.message);
+      throw new Error(jsonResponse.message || 'Unauthorized or forbidden');
+    }
+  
+    if (!jsonResponse.token) {
+      throw new Error('Login failed, token missing');
     }
   
     localStorage.setItem('token', jsonResponse.token);
-  
+    
     return jsonResponse;
   };
+  
 
   this.getHeader = function () {
     return {
@@ -108,7 +113,7 @@ export default function MkdSDK() {
   };  
 
     this.check = async function (role) {
-      const response = await fetch(this._baseurl + '/v1/api/rest/check', {
+      const response = await fetch(`${this._baseurl}/v1/api/rest/check`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

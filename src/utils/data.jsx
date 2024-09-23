@@ -1,4 +1,4 @@
-export const receiptData = [
+ export const receiptData = [
   {
     id: 20,
     create_at: "2024-06-18",
@@ -61,7 +61,7 @@ export const receiptData = [
       id: 43,
       user_id: 0,
       oauth: null,
-      role: "user",
+      role: "admin",
       first_name: "",
       last_name: "",
       company_name: "Neon",

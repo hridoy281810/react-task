@@ -176,5 +176,45 @@ export const mappingValues = {
 export function truncate(text, length = null) {}
 
 export function processList(value, options, globalDispatch, authDispatch) {
-  // TO DO
+  const { action } = options;
+
+  if (!action) {
+    throw new Error("No action defined in options.");
+  }
+
+  const { key, operation } = action;
+
+  if (!Array.isArray(value)) {
+    throw new Error("The value should be an array of objects.");
+  }
+
+  switch (operation) {
+    case "list":
+      return value.map(item => item[key]).filter(val => val !== undefined);
+
+    case "add":
+      return value.reduce((total, item) => {
+        const itemValue = item[key];
+        return total + (typeof itemValue === 'number' ? itemValue : 0);
+      }, 0);
+
+    default:
+      throw new Error(`Unsupported operation: ${operation}`);
+  }
 }
+
+const data = [
+  { total_charges: 100 },
+  { total_charges: 200 },
+  { total_charges: 150 },
+];
+
+const options = {
+  action: {
+    key: "total_charges",
+    operation: "add",
+  },
+};
+
+const result = processList(data, options);
+console.log(result); // Output: 450

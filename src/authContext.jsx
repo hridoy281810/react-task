@@ -1,7 +1,5 @@
 import React, { useReducer } from "react";
-import MkdSDK from "./utils/MkdSDK";
-
-export const AuthContext = React.createContext();
+import MkdSDK from "Utils/MkdSDK";
 
 const initialState = {
   isAuthenticated: false,
@@ -10,12 +8,16 @@ const initialState = {
   role: null,
 };
 
+export const AuthContext = React.createContext(initialState);
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      //TODO
       return {
         ...state,
+        isAuthenticated: true,
+        token: action.payload.token,
+        user: action.payload.user,
       };
     case "LOGOUT":
       localStorage.clear();
@@ -45,7 +47,24 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   React.useEffect(() => {
-    //TODO
+    const checkTokenValidity = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await sdk.check("admin");
+          if (response.error) {
+            dispatch({ type: "LOGOUT" });
+          } else {
+            dispatch({ type: "LOGIN", payload: { token, user: response.user } });
+          }
+        } catch (error) {
+          console.error("Token check failed:", error);
+          dispatch({ type: "LOGOUT" });
+        }
+      }
+    };
+
+    checkTokenValidity();
   }, []);
 
   return (

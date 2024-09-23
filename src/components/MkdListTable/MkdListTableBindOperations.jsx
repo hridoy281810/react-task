@@ -9,38 +9,42 @@ export const operations = {
   LESS_THAN: "lt",
   GREATER_THAN: "gt",
 };
-
 export const runOperation = (row, column, operator, value) => {
+  const rowValue = row[column];
+
   switch (operator) {
     case operations.EQUAL:
-    // TO DO
-    // return runEqualOperation(row, column, value);
+      return rowValue === value;
+      
     case operations.NOT_EQUAL:
-    // TO DO
-    // return runNotEqualOperation(row, column, value);
+      return rowValue !== value;
+      
     case operations.IS_NULL:
-    // TO DO
-    // return runIsNullOperation(row, column, value);
+      return rowValue === null;
+      
     case operations.IS_NOT_NULL:
-    // TO DO
-    // return runIsNotNullOperation(row, column, value);
+      return rowValue !== null;
+      
     case operations.CONTAINS:
-    // TO DO
-    // return runContainsOperation(row, column, value);
+      return typeof rowValue === 'string' && rowValue.includes(value);
+      
     case operations.START_WITH:
-    // TO DO
-    // return runStartWithOperation(row, column, value);
+      return typeof rowValue === 'string' && rowValue.startsWith(value);
+      
     case operations.END_WITH:
-    // TO DO
-    // return runEndWithOperation(row, column, value);
+      return typeof rowValue === 'string' && rowValue.endsWith(value);
+      
     case operations.GREATER_THAN:
-    // TO DO
-    // return runGreaterThanOperation(row, column, value);
+      return rowValue > value;
+      
     case operations.LESS_THAN:
-    // TO DO
-    // return runLessThanOperation(row, column, value);
+      return rowValue < value;
+      
+    default:
+      return false; // Return false if the operator is not recognized
   }
 };
+
 export const logicalOR = (action, row) => {
   if (
     !Array.isArray(action?.bind?.column) ||
